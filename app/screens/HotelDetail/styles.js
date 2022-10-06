@@ -71,6 +71,7 @@ export default StyleSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject,
+  
   },
   itemReason: {
     paddingLeft: 10,

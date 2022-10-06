@@ -1,20 +1,41 @@
 import React from 'react';
-import {View, TouchableOpacity} from 'react-native';
-import {Image, Icon, Text} from '@components';
+import { View, TouchableOpacity, Image } from 'react-native';
+import { Icon, Text } from '@components';
 import PropTypes from 'prop-types';
 import styles from './styles';
-import {useTheme} from '@config';
-import {useTranslation} from 'react-i18next';
+import { useTheme } from '@config';
+import { useTranslation } from 'react-i18next';
+import { postRequest } from '../../manager/Apimanager';
+import Endpoints from '../../manager/Endpoints';
+import Toast from '../../components/Toast/Toast';
+// import Toast from '../../components/Toast/Toast';
+
 
 export default function BookingHistory(props) {
-  const {t} = useTranslation();
-  const {colors} = useTheme();
-  const {style, name, PostedOn, Views, calls, price, Likes, image, onPress} =
-    props;
+  const { t } = useTranslation();
+  const { colors } = useTheme();
 
+  const { style, post_id, name, PostedOn, Views, calls, price, Likes, image, onPress, status, location } = props
+
+  const deletePostHandler = () => {
+
+
+    postRequest(Endpoints.DELETE_MY_ADS, {
+      "post_id": post_id ?? ""
+    }, (res) => {
+      console.log("deletePostHandler===>>ress====>>>>>", JSON.stringify(res.data));
+      if (res.data.status === 'success') {
+        Toast.success(res.data.message)
+        nav
+      }
+    }, (err) => {
+      console.log("deletePostHandler===>>errr", err);
+
+    })
+  }
   return (
     <TouchableOpacity
-      style={[styles.contain, {shadowColor: colors.border}, style]}
+      style={[styles.contain, { shadowColor: colors.border }, style]}
       onPress={onPress}
       activeOpacity={0.9}>
       <View
@@ -28,12 +49,22 @@ export default function BookingHistory(props) {
         <Text body2 whiteColor semibold>
           {name}
         </Text>
-        <Icon name={'trash'} size={20} color={'#eae71b'} solid />
+        <Icon name={'trash'} size={20} color={'#eae71b'} solid
+          onPress={() => { deletePostHandler() }}
+        />
       </View>
-      <View style={[styles.mainContent, {backgroundColor: colors.primary}]}>
-        <Image source={image} style={styles.blockImage} />
+      <View style={[styles.mainContent, { backgroundColor: colors.primary }]}>
+        {/* <Image source={image} style={styles.blockImage} />
+         */}
+        <Image
+          source={{
+            // uri: 'https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8&w=1000&q=80'
+            uri: image
+          }}
+          style={styles.blockImage}
 
-        <View style={{flex: 1, alignItems: 'flex-end'}}>
+        />
+        <View style={{ flex: 1, alignItems: 'flex-end' }}>
           <Text caption2 whiteColor>
             {t('Posted On')}
           </Text>
@@ -50,12 +81,22 @@ export default function BookingHistory(props) {
             {t('Status')}
           </Text>
           <Text caption2 whiteColor bold>
-            Active
+            {/* Active */}
+            {status}
+
+          </Text>
+          <Text caption2 whiteColor>
+            {t('Location')}
+          </Text>
+          <Text caption2 whiteColor bold>
+            {/* Active */}
+            {location}
+
           </Text>
         </View>
       </View>
-      <View style={[styles.validContent, {backgroundColor: colors.card}]}>
-        <Text overline semibold>
+      <View style={[styles.validContent, { backgroundColor: colors.card }]}>
+        {/* <Text overline semibold>
           <Icon name={'eye'} size={10} color={'grey'} solid /> {Views}
         </Text>
         <Text overline semibold>
@@ -63,7 +104,7 @@ export default function BookingHistory(props) {
         </Text>
         <Text overline semibold>
           <Icon name={'heart'} size={10} color={'grey'} solid /> {Likes}
-        </Text>
+        </Text> */}
       </View>
     </TouchableOpacity>
   );
@@ -76,6 +117,7 @@ BookingHistory.propTypes = {
   checkOut: PropTypes.string,
   total: PropTypes.string,
   price: PropTypes.string,
+  status: PropTypes.string,
   onPress: PropTypes.func,
 };
 
@@ -86,5 +128,6 @@ BookingHistory.defaultProps = {
   checkOut: '',
   total: '',
   price: '',
-  onPress: () => {},
+  status: 'Active',
+  onPress: () => { },
 };

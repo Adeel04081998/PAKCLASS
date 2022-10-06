@@ -1,13 +1,15 @@
 import React from 'react';
-import {View, TouchableOpacity, FlatList} from 'react-native';
-import {Image, Text, Icon, StarRating, Tag} from '@components';
-import {BaseColor, useTheme} from '@config';
+import { View, TouchableOpacity, FlatList, Image } from 'react-native';
+import { Text, Icon, StarRating, Tag } from '@components';
+import { BaseColor, useTheme } from '@config';
 import PropTypes from 'prop-types';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import styles from './styles';
+import { Images } from '../../config/images';
+
 export default function HotelItem(props) {
-  const {t} = useTranslation();
-  const {colors} = useTheme();
+  const { t } = useTranslation();
+  const { colors } = useTheme();
   const {
     list,
     block,
@@ -25,21 +27,41 @@ export default function HotelItem(props) {
     services,
     rateCount,
     numReviews,
+    favIconOnPress
   } = props;
 
   /**
    * Display hotel item as block
    */
   const renderBlock = () => {
+    // console.log("image=>", image);
     return (
       <View style={style}>
         <TouchableOpacity onPress={onPress} activeOpacity={0.9}>
-          <Image source={image} style={styles.blockImage} />
+          {/* <Image source={image}
+          style={styles.blockImage} 
+          /> */}
+
+          <Image
+            source={{
+              uri: image
+            }}
+            style={styles.blockImage}
+
+          />
         </TouchableOpacity>
-        <View style={{paddingHorizontal: 20}}>
-          <Text title2 semibold style={{marginTop: 5}} numberOfLines={1}>
-            {name}
-          </Text>
+        <View style={{ paddingHorizontal: 20 }}>
+          <View style={{ flexDirection: 'row' ,justifyContent:'space-between', }}>
+            <Text title2 semibold style={{ marginTop: 5 }} numberOfLines={1}>
+              {name}
+            </Text>
+            <Icon name={'heart'} size={20} color={colors.primary} solid
+              onPress={favIconOnPress}
+              style={{ justifyContent:'center', alignItems:'center', alignSelf:'center', marginVertical:10}}
+
+            />
+          </View>
+
           <View style={styles.blockContentAddress}>
             <Icon name="map-marker-alt" color={colors.primaryLight} size={10} />
             <Text
@@ -53,9 +75,9 @@ export default function HotelItem(props) {
             </Text>
           </View>
           <View style={styles.blockContentDetail}>
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               <Text title3 primaryColor semibold>
-                {price}
+                Rs {price}
               </Text>
               <Text
                 caption1
@@ -66,6 +88,7 @@ export default function HotelItem(props) {
                 numberOfLines={1}>
                 {available}
               </Text>
+
             </View>
             <View
               style={{
@@ -78,7 +101,7 @@ export default function HotelItem(props) {
                 style={{
                   marginLeft: 10,
                 }}>
-                <Text caption1 grayColor semibold style={{paddingBottom: 5}}>
+                <Text caption1 grayColor semibold style={{ paddingBottom: 5 }}>
                   {rateStatus}
                 </Text>
                 <StarRating
@@ -86,26 +109,33 @@ export default function HotelItem(props) {
                   starSize={10}
                   maxStars={5}
                   rating={rate}
-                  selectedStar={rating => {}}
+                  selectedStar={rating => { }}
                   fullStarColor={BaseColor.yellowColor}
                 />
               </View>
             </View>
           </View>
         </View>
-        <View style={styles.contentService}>
+        {/* <View style={styles.contentService}>
           <FlatList
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            data={services}
+            data={[
+              { id: '1', icon: 'wifi', name: 'Free Wifi' },
+              { id: '2', icon: 'coffee', name: 'Free Coffee' },
+              { id: '3', icon: 'bath', name: 'Free Bath' },
+              { id: '4', icon: 'car', name: 'Free Car' },
+              { id: '5', icon: 'paw', name: 'Free Paw' },
+              { id: '6', icon: 'futbol', name: 'Free Futbol' },
+            ]}
             keyExtractor={(item, index) => item.id}
-            renderItem={({item, index}) => (
+            renderItem={({ item, index }) => (
               <View style={styles.serviceItemBlock} key={'block' + index}>
                 <Icon name={item.icon} size={16} color={colors.accent} />
                 <Text
                   overline
                   grayColor
-                  style={{marginTop: 4}}
+                  style={{ marginTop: 4 }}
                   numberOfLines={1}>
                   {item.name}
                 </Text>
@@ -120,7 +150,7 @@ export default function HotelItem(props) {
             }}>
             <Icon name="angle-right" size={16} color={BaseColor.dividerColor} />
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
     );
   };
@@ -132,7 +162,14 @@ export default function HotelItem(props) {
     return (
       <View style={[styles.listContent, style]}>
         <TouchableOpacity onPress={onPress} activeOpacity={0.9}>
-          <Image source={image} style={styles.listImage} />
+          <Image
+            source={{
+              uri: image
+            }}
+            style={styles.listImage}
+
+          />
+
         </TouchableOpacity>
         <View style={styles.listContentRight}>
           <Text headline semibold numberOfLines={1}>
@@ -156,7 +193,7 @@ export default function HotelItem(props) {
               starSize={10}
               maxStars={5}
               rating={rate}
-              selectedStar={rating => {}}
+              selectedStar={rating => { }}
               fullStarColor={BaseColor.yellowColor}
             />
             <Text
@@ -177,13 +214,13 @@ export default function HotelItem(props) {
             title3
             primaryColor
             semibold
-            style={{marginTop: 5, marginBottom: 5}}>
+            style={{ marginTop: 5, marginBottom: 5 }}>
             {price}
           </Text>
           <Text caption1 semibold>
             {t('avg_night')}
           </Text>
-          <Text footnote accentColor style={{marginTop: 3}}>
+          <Text footnote accentColor style={{ marginTop: 3 }}>
             {available}
           </Text>
         </View>
@@ -198,7 +235,21 @@ export default function HotelItem(props) {
     return (
       <View style={[styles.girdContent, style]}>
         <TouchableOpacity onPress={onPress} activeOpacity={0.9}>
-          <Image source={image} style={styles.girdImage} />
+          {/* <Image source={image} style={styles.girdImage} /> */}
+          {/* <Image
+            source={image}
+
+            style={styles.girdImage}
+
+          /> */}
+
+          <Image
+            source={{
+              uri: image
+            }}
+            style={styles.girdImage}
+
+          />
         </TouchableOpacity>
         <View style={styles.girdContentLocation}>
           <Icon name="map-marker-alt" color={colors.primary} size={10} />
@@ -221,11 +272,15 @@ export default function HotelItem(props) {
           {name}
         </Text>
         <View style={styles.girdContentRate}>
-          <Icon name={'heart'} size={20} color={'grey'} solid />
-          <Text caption2 grayColor>
+          <Icon name={'heart'} size={20} color={colors.primary} solid
+            onPress={favIconOnPress}
+
+          />
+
+          {/* <Text caption2 grayColor>
             <Icon name={'list'} size={8} color={'grey'} solid />
             {t(' Catagory ')}
-          </Text>
+          </Text> */}
         </View>
         <Text
           title3
@@ -234,7 +289,7 @@ export default function HotelItem(props) {
           style={{
             marginTop: 5,
           }}>
-          {price}
+          Rs {price}
         </Text>
       </View>
     );
@@ -262,6 +317,7 @@ HotelItem.propTypes = {
   services: PropTypes.array,
   onPress: PropTypes.func,
   onPressTag: PropTypes.func,
+  favIconOnPress: PropTypes.func
 };
 
 HotelItem.defaultProps = {
@@ -279,6 +335,7 @@ HotelItem.defaultProps = {
   rateStatus: '',
   numReviews: 0,
   services: [],
-  onPress: () => {},
-  onPressTag: () => {},
+  onPress: () => { },
+  onPressTag: () => { },
+  favIconOnPress: () => { }
 };

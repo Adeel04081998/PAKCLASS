@@ -12,6 +12,7 @@ export default StyleSheet.create({
     borderRadius: 8,
     height: Utils.scaleWithPixel(120),
     width: '100%',
+    backgroundColor: '#dcdcdc'
   },
   girdContentLocation: {
     flexDirection: 'row',
@@ -55,6 +56,8 @@ export default StyleSheet.create({
     height: Utils.scaleWithPixel(120, 1),
     width: Utils.scaleWithPixel(120, 1),
     borderRadius: 8,
+    // backgroundColor:'red'
+    backgroundColor: '#dcdcdc'
   },
   listContent: {
     flexDirection: 'row',
@@ -76,5 +79,6 @@ export default StyleSheet.create({
     borderRadius:20,
     height: Utils.scaleWithPixel(200),
     width: '100%',
+    backgroundColor: '#dcdcdc'
   },
 });

@@ -1,13 +1,13 @@
 import React from 'react';
-import {View, TouchableOpacity} from 'react-native';
-import {Image, Text, Icon, StarRating, Tag, ProfileDetail} from '@components';
-import {BaseColor, useTheme} from '@config';
+import { View, TouchableOpacity, Image } from 'react-native';
+import { Text, Icon, StarRating, Tag, ProfileDetail } from '@components';
+import { BaseColor, useTheme } from '@config';
 import PropTypes from 'prop-types';
 import styles from './styles';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 export default function TourItem(props) {
-  const {t} = useTranslation();
-  const {colors} = useTheme();
+  const { t } = useTranslation();
+  const { colors } = useTheme();
   const {
     list,
     block,
@@ -26,6 +26,7 @@ export default function TourItem(props) {
     startTime,
     services,
     travelTime,
+    onFavPress
   } = props;
 
   /**
@@ -34,30 +35,38 @@ export default function TourItem(props) {
   const renderBlock = () => {
     return (
       <View style={style}>
-        <View style={{paddingHorizontal:10}}>
-        <TouchableOpacity onPress={onPress} activeOpacity={0.9}>
-          <Image source={image} style={styles.blockImage} />
-          <View
-            style={[
-              styles.blockPriceContent,
-              {backgroundColor: colors.primary},
-            ]}>
-            <Text title3 whiteColor semibold>
-              {price}
+        <View style={{ paddingHorizontal: 10 }}>
+          <TouchableOpacity onPress={onPress} activeOpacity={0.9}>
+            {/* <Image source={image} style={styles.blockImage} /> */}
+            <Image source={{
+              uri: image
+            }} style={styles.blockImage} />
+
+
+            <View
+              style={[
+                styles.blockPriceContent,
+                { backgroundColor: colors.primary },
+              ]}>
+              <Text title3 whiteColor semibold>
+                {price}
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text
+              title3
+              semibold
+
+              numberOfLines={1}>
+              {name}
             </Text>
+            {/* <Icon name={'heart'} size={20} color={'grey'} solid /> */}
+            <Icon name={'heart'} size={15} color={colors.primary} solid
+              onPress={onFavPress}
+            />
           </View>
-        </TouchableOpacity>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text
-            title3
-            semibold
-           
-            numberOfLines={1}>
-            {name}
-          </Text>
-          <Icon name={'heart'} size={20} color={'grey'} solid />
-        </View>
-        
+
           <Text
             caption2
             grayColor
@@ -68,23 +77,23 @@ export default function TourItem(props) {
             {location}
           </Text>
           <Text
-                caption1
-                grayColor
-                style={{
-                  marginLeft: 3,
-                }}>
-                {startTime}
-              </Text>
-        
-        
-        <Text
-          primaryColor
-          semibold
-          style={{
-            marginTop: 5,
-          }}>
-          {price}
-        </Text>
+            caption1
+            grayColor
+            style={{
+              marginLeft: 3,
+            }}>
+            {startTime}
+          </Text>
+
+
+          <Text
+            primaryColor
+            semibold
+            style={{
+              marginTop: 5,
+            }}>
+            {price}
+          </Text>
         </View>
       </View>
     );
@@ -97,14 +106,20 @@ export default function TourItem(props) {
     return (
       <View style={[styles.listContent, style]}>
         <TouchableOpacity onPress={onPress} activeOpacity={0.9}>
-          <Image source={image} style={styles.listImage} />
+          {/* <Image source={image} style={styles.listImage} /> */}
+          <Image source={{
+            uri: image
+          }} style={styles.listImage} />
+
         </TouchableOpacity>
         <View style={styles.listContentRight}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text headline semibold>
               {name}
             </Text>
-            <Icon name={'heart'} size={15} color={'grey'} solid />
+            <Icon name={'heart'} size={15} color={colors.primary} solid
+              onPress={onFavPress}
+            />
           </View>
           <View
             style={{
@@ -164,7 +179,14 @@ export default function TourItem(props) {
     return (
       <View style={[styles.girdContent, style]}>
         <TouchableOpacity onPress={onPress} activeOpacity={0.9}>
-          <Image source={image} style={styles.girdImage} />
+          {/* <Image source={image} style={styles.girdImage} /> */}
+          <Image source={{
+            uri: image
+          }} style={styles.girdImage}
+
+
+          />
+
         </TouchableOpacity>
         <View style={styles.girdContentLocation}>
           <Text
@@ -176,7 +198,11 @@ export default function TourItem(props) {
             <Icon name="map-marker-alt" color={colors.primary} size={10} />{' '}
             {location}
           </Text>
-          <Icon name={'heart'} size={15} color={'grey'} solid />
+          {/* <Icon name={'heart'} size={15} color={'grey'} solid />
+           */}
+          <Icon name={'heart'} size={15} color={colors.primary} solid
+            onPress={onFavPress}
+          />
         </View>
         <Text
           body2
@@ -228,6 +254,8 @@ TourItem.propTypes = {
   onPress: PropTypes.func,
   onPressBookNow: PropTypes.func,
   onPressUser: PropTypes.func,
+  onFavPress: PropTypes.func
+
 };
 
 TourItem.defaultProps = {
@@ -246,7 +274,8 @@ TourItem.defaultProps = {
   startTime: '',
   author: {},
   services: [],
-  onPress: () => {},
-  onPressBookNow: () => {},
-  onPressUser: () => {},
+  onPress: () => { },
+  onPressBookNow: () => { },
+  onPressUser: () => { },
+  onFavPress: () => { }
 };

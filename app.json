@@ -2,9 +2,10 @@
   "expo": {
     "name": "PakClass",
     "slug": "PakClass",
-    "version": "1.0.1",
+    "version": "1.0.20",
     "orientation": "portrait",
-    "icon": "./assets/app_icon.jpeg",
+    "icon": "./assets/classified.png",
+    
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -16,6 +17,14 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.huynh.PakClass"
@@ -25,7 +34,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.huynh.PakClass"
+      "package": "com.huynh.PakClassAssignmnt",
+      "versionCode":20
     },
     "web": {
       "favicon": "./assets/favicon.png"

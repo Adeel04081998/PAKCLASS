@@ -7,6 +7,7 @@ export default StyleSheet.create({
   blockImage: {
     height: Utils.scaleWithPixel(200),
     width: '100%',
+    backgroundColor: '#dcdcdc'
   },
   blockContentAddress: {
     flexDirection: 'row',
@@ -43,6 +44,7 @@ export default StyleSheet.create({
     height: Utils.scaleWithPixel(140),
     width: Utils.scaleWithPixel(120),
     borderRadius: 8,
+    backgroundColor: '#dcdcdc'
   },
   listContent: {
     flexDirection: 'row',
@@ -62,6 +64,7 @@ export default StyleSheet.create({
     borderRadius: 8,
     height: Utils.scaleWithPixel(120),
     width: '100%',
+    backgroundColor: '#dcdcdc'
   },
   girdContent: {
     flex: 1,

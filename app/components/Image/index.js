@@ -6,7 +6,9 @@ export default function Index(props) {
   const {style} = props;
   return (
     <View style={[styles.contaner, style]}>
-      <Image {...props} style={styles.content} />
+      <Image {...props} style={styles.content} 
+    
+      />
     </View>
   );
 }

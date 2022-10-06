@@ -1,10 +1,10 @@
 import React from 'react';
-import {TextInput, View, I18nManager} from 'react-native';
+import { TextInput, View, I18nManager } from 'react-native';
 import PropTypes from 'prop-types';
-import {BaseStyle, BaseColor, useTheme} from '@config';
+import { BaseStyle, BaseColor, useTheme } from '@config';
 
 export default function Index(props) {
-  const {colors} = useTheme();
+  const { colors } = useTheme();
   const cardColor = colors.card;
   const {
     style,
@@ -19,9 +19,10 @@ export default function Index(props) {
     textAlignVertical,
     icon,
     onSubmitEditing,
+    editable,
   } = props;
   return (
-    <View style={[BaseStyle.textInput, {backgroundColor: cardColor}, style]}>
+    <View style={[BaseStyle.textInput, { backgroundColor: cardColor }, style]}>
       <TextInput
         style={{
           fontFamily: 'Raleway',
@@ -44,6 +45,7 @@ export default function Index(props) {
         multiline={multiline}
         textAlignVertical={textAlignVertical}
         onSubmitEditing={onSubmitEditing}
+        editable={editable}
       />
       {icon}
     </View>
@@ -63,12 +65,13 @@ Index.propTypes = {
   textAlignVertical: PropTypes.string,
   icon: PropTypes.node,
   onSubmitEditing: PropTypes.func,
+  editable: PropTypes.bool
 };
 
 Index.defaultProps = {
   style: {},
-  onChangeText: text => {},
-  onFocus: () => {},
+  onChangeText: text => { },
+  onFocus: () => { },
   placeholder: 'Placeholder',
   value: '',
   success: true,
@@ -77,5 +80,7 @@ Index.defaultProps = {
   multiline: false,
   textAlignVertical: 'center',
   icon: null,
-  onSubmitEditing: () => {},
+  onSubmitEditing: () => { },
+  editable: true
+
 };

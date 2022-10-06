@@ -124,7 +124,7 @@ export default function AboutUs({navigation}) {
             keyExtractor={(item, index) => 'ourTeam' + index}
             renderItem={({item, index}) => (
               <Card
-                image={item.image}
+                image={'https://pakclass.com/storage/files/pk/c931025763bf0b4950bce75e0f39c76c.jpg'}
                 onPress={() => navigation.navigate(item.screen)}
                 style={{
                   flex: 1,

@@ -1,12 +1,14 @@
 import React from 'react';
-import {View, TouchableOpacity} from 'react-native';
-import {Image, Icon, Text} from '@components';
+import { View, TouchableOpacity, Image } from 'react-native';
+import { Icon, Text } from '@components';
 import styles from './styles';
 import PropTypes from 'prop-types';
-import {BaseColor, useTheme} from '@config';
+import { BaseColor, useTheme } from '@config';
+import { useSelector } from 'react-redux';
+import GV from '../../utils/GV';
 
 export default function ProfileDetail(props) {
-  const {colors} = useTheme();
+  const { colors } = useTheme();
   const {
     style,
     image,
@@ -20,6 +22,23 @@ export default function ProfileDetail(props) {
     textThird,
     icon,
   } = props;
+  const userReducer = useSelector(state => state.userReducer)
+  const { user } = userReducer
+  // console.log("user=>", user);
+  // let splitted_Image = ''
+  // let user_Profile_Pic = ''
+  let splitted_Image = user?.photo?.split('.com/') ?? [];
+  let user_Profile_Pic = GV.imageUrlPrefix.concat(splitted_Image[1])
+
+  // if (user) {
+  //   splitted_Image = user?.photo?.split('.com/');
+  //   user_Profile_Pic = GV.imageUrlPrefix.concat(splitted_Image[1])
+
+  // }else{
+  //   splitted_Image = image.split('.com/');
+  //   user_Profile_Pic = GV.imageUrlPrefix.concat(splitted_Image[1])
+  // }
+  // console.log("user==>pic",user_Profile_Pic);
   return (
     <TouchableOpacity
       style={[styles.contain, style]}
@@ -27,14 +46,26 @@ export default function ProfileDetail(props) {
       activeOpacity={0.9}>
       <View style={[styles.contentLeft, styleLeft]}>
         <View>
-          <Image source={image} style={[styles.thumb, styleThumb]} />
-          <View style={[styles.point, {backgroundColor: colors.primaryLight}]}>
-            <Text overline whiteColor semibold>
-              {point}
-            </Text>
-          </View>
+          <Image
+
+
+            source={{
+              uri: user_Profile_Pic
+            }} style={[styles.thumb, styleThumb]}
+
+
+          />
+          {
+            point ?
+              <View style={[styles.point, { backgroundColor: colors.primaryLight }]}>
+                <Text overline whiteColor semibold>
+                  {point}
+                </Text>
+              </View>
+              : <View />
+          }
         </View>
-        <View style={{alignItems: 'flex-start'}}>
+        <View style={{ alignItems: 'flex-start' }}>
           <Text headline semibold numberOfLines={1}>
             {textFirst}
           </Text>
@@ -90,5 +121,5 @@ ProfileDetail.defaultProps = {
   styleLeft: {},
   styleThumb: {},
   styleRight: {},
-  onPress: () => {},
+  onPress: () => { },
 };

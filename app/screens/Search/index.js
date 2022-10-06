@@ -1,4 +1,9 @@
-import React, {useState} from 'react';
+
+
+
+
+
+import React, { useState } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -7,7 +12,7 @@ import {
   Platform,
   Picker
 } from 'react-native';
-import {BaseStyle, BaseColor, useTheme} from '@config';
+import { BaseStyle, BaseColor, useTheme } from '@config';
 import {
   Header,
   SafeAreaView,
@@ -19,11 +24,15 @@ import {
 } from '@components';
 import Modal from 'react-native-modal';
 import styles from './styles';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+import { postRequest } from '../../manager/Apimanager';
+import Endpoints from '../../manager/Endpoints';
+import { sharedExceptionHandler } from '../../helpers/sharedActions';
+import Toast from '../../components/Toast/Toast';
 
-export default function Search({navigation}) {
-  const {colors} = useTheme();
-  const {t} = useTranslation();
+export default function Search({ navigation }) {
+  const { colors } = useTheme();
+  const { t } = useTranslation();
   const offsetKeyboard = Platform.select({
     ios: 0,
     android: 20,
@@ -80,9 +89,40 @@ export default function Search({navigation}) {
    * @returns
    */
 
+  const onSearchHandler = () => {
+    postRequest(Endpoints.SEARCH, {
+      'title': keyword ?? 'car'
+    }, (res) => {
 
+      console.log("onSearchHandler===>>ress====>>>>>", res);
+
+      const { items, status, failed } = res.data
+
+      if (status === 'success' && items.length) {
+        setLoading(false)
+        navigation.navigate('Hotel', {
+          searchAdd: items
+        });
+
+
+
+      } else if (failed) {
+        sharedExceptionHandler(res.data)
+      }  
+      else{
+        setLoading(false)
+        // sharedExceptionHandler("No record Found")
+        Toast.error('No Record Exists')
+
+      }
+
+    }), (err) => {
+      console.log("onSearchHandler===>>errr",err);
+    }
+
+  }
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <Header
         title={t('search')}
         renderLeft={() => {
@@ -95,34 +135,31 @@ export default function Search({navigation}) {
       <SafeAreaView
         style={BaseStyle.safeAreaView}
         edges={['right', 'left', 'bottom']}>
-        
+
 
         <KeyboardAvoidingView
           behavior={Platform.OS === 'android' ? 'height' : 'padding'}
           keyboardVerticalOffset={offsetKeyboard}
-          style={{flex: 1}}>
-          <ScrollView contentContainerStyle={{padding: 20}}>
+          style={{ flex: 1 }}>
+          <ScrollView contentContainerStyle={{ padding: 20 }}>
             <TextInput
               onChangeText={text => setKeyword(text)}
               placeholder={t('what are you looking for ?')}
               value={keyword}
             />
-            <TextInput
+            {/* <TextInput
               style={{marginTop: 15}}
               onChangeText={text => setKeyword(text)}
               placeholder={t('where is your location ?')}
               value={keyword}
-            />
+            /> */}
           </ScrollView>
-          <View style={{paddingHorizontal: 20, paddingVertical: 15}}>
+          <View style={{ paddingHorizontal: 20, paddingVertical: 15 }}>
             <Button
               full
               onPress={() => {
                 setLoading(true);
-                setTimeout(() => {
-                  navigation.navigate('Hotel');
-                  setLoading(false);
-                }, 500);
+                onSearchHandler()
               }}
               loading={loading}>
               {t('Find')}

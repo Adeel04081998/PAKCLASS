@@ -1,10 +1,10 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useSelector} from 'react-redux';
-import {BaseColor, useTheme, useFont} from '@config';
-import {useTranslation} from 'react-i18next';
-import {Icon} from '@components';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useSelector } from 'react-redux';
+import { BaseColor, useTheme, useFont } from '@config';
+import { useTranslation } from 'react-i18next';
+import { Icon } from '@components';
 /* Stack Screen */
 import Profile1 from '@screens/Profile1';
 import Profile2 from '@screens/Profile2';
@@ -83,6 +83,7 @@ import PostAddCatagory from '@screens/PostAddCatagory';
 
 const MainStack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
+
 
 export default function Main() {
   return (
@@ -171,16 +172,18 @@ export default function Main() {
       <MainStack.Screen name="Setting" component={Setting} />
       <MainStack.Screen name="ThemeSetting" component={ThemeSetting} />
       <MainStack.Screen name="NotFound" component={NotFound} />
+      <MainStack.Screen name="ProfileExanple" component={ProfileExample} />
+      
     </MainStack.Navigator>
   );
 }
 
 function BottomTabNavigator() {
-  const {t} = useTranslation();
-  const {colors} = useTheme();
+  const { t } = useTranslation();
+  const { colors } = useTheme();
   const font = useFont();
-  const auth = useSelector(state => state.auth);
-  const login = auth.login.success;
+const userReducer = useSelector(state => state.userReducer)
+  const login = userReducer?.access_token ?? '';
   return (
     <BottomTab.Navigator
       initialRouteName="Home"
@@ -199,7 +202,7 @@ function BottomTabNavigator() {
         component={Home}
         options={{
           title: t('home'),
-          tabBarIcon: ({color}) => {
+          tabBarIcon: ({ color }) => {
             return <Icon color={color} name="home" size={20} solid />;
           },
         }}
@@ -209,7 +212,7 @@ function BottomTabNavigator() {
         component={BookingDetail}
         options={{
           title: t('My Ads'),
-          tabBarIcon: ({color}) => {
+          tabBarIcon: ({ color }) => {
             return <Icon color={color} name="bars" size={20} solid />;
           },
         }}
@@ -219,7 +222,7 @@ function BottomTabNavigator() {
         component={Post}
         options={{
           title: t('Post Add'),
-          tabBarIcon: ({color}) => {
+          tabBarIcon: ({ color }) => {
             return <Icon solid color={color} name="plus-circle" size={20} />;
           },
         }}
@@ -229,7 +232,7 @@ function BottomTabNavigator() {
         component={Messenger}
         options={{
           title: t('Messages'),
-          tabBarIcon: ({color}) => {
+          tabBarIcon: ({ color }) => {
             return <Icon color={color} name="comment" size={20} solid />;
           },
         }}
@@ -239,7 +242,7 @@ function BottomTabNavigator() {
         component={login ? Profile : Walkthrough}
         options={{
           title: t('Profile'),
-          tabBarIcon: ({color}) => {
+          tabBarIcon: ({ color }) => {
             return <Icon solid color={color} name="user-circle" size={20} />;
           },
         }}

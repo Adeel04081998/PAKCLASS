@@ -1,19 +1,42 @@
 import React from 'react';
-import {View, TouchableOpacity} from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import styles from './styles';
 import PropTypes from 'prop-types';
-import {Image} from '@components';
-import {Images, useTheme} from '@config';
+// import { Image } from '@components';
+import Image from '../../components/Image/index';
+
+import { Images, useTheme } from '@config';
+import { Text, Icon, StarRating, Tag } from '@components';
 
 export default function Card(props) {
-  const {colors} = useTheme();
-  const {style, children, styleContent, image, onPress} = props;
+  const { colors } = useTheme();
+  const { style, children, styleContent, image, onPress } = props;
+  // console.log("image Card", image);
   return (
     <TouchableOpacity
-      style={[styles.card, {borderColor: colors.border}, style]}
+      style={[styles.card, { borderColor: colors.border }, style]}
       onPress={onPress}
       activeOpacity={0.9}>
-      <Image source={image} style={styles.imageBanner} />
+
+      <Image
+        // source={image}
+        source={{
+          // uri: 'https://pakclass.com/storage/files/pk/c931025763bf0b4950bce75e0f39c76c.jpg'
+          uri: image
+
+        }}
+        style={{ backgroundColor: '#dcdcdc' }}
+
+      // style={styles.listImage}
+
+      />
+      {/* <View style={styles.girdContentRate}>
+        <Icon name={'heart'} size={20} color={'grey'} solid />
+        <Text caption2 grayColor>
+          <Icon name={'list'} size={8} color={'grey'} solid />
+          {(' Catagory ')}
+        </Text>
+      </View> */}
       <View style={[styles.content, styleContent]}>{children}</View>
     </TouchableOpacity>
   );
@@ -34,5 +57,5 @@ Card.defaultProps = {
   image: Images.profile2,
   style: {},
   styleContent: {},
-  onPress: () => {},
+  onPress: () => { },
 };

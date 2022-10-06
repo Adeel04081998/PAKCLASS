@@ -67,7 +67,7 @@ const userReducer = useSelector(state => state.userReducer)
           </Swiper>
         </View>
         <View style={{ width: '100%' }}>
-          <Button
+          {/* <Button
             full
             style={{
               backgroundColor: BaseColor.navyBlue,
@@ -77,7 +77,7 @@ const userReducer = useSelector(state => state.userReducer)
               authentication();
             }}>
             {t('login_facebook')}
-          </Button>
+          </Button> */}
           <Button
             full
             style={{ marginTop: 20 }}

@@ -1,18 +1,25 @@
-import React, {useState} from 'react';
-import {FlatList, RefreshControl, View, Animated} from 'react-native';
-import {BaseStyle, useTheme} from '@config';
-import {Header, SafeAreaView, Icon, HotelItem, FilterSort} from '@components';
+
+
+
+
+import React, { useState } from 'react';
+import { FlatList, RefreshControl, View, Animated } from 'react-native';
+import { BaseStyle, useTheme } from '@config';
+import { Header, SafeAreaView, Icon, HotelItem, FilterSort } from '@components';
 import styles from './styles';
 import * as Utils from '@utils';
-import {useTranslation} from 'react-i18next';
-import {HotelData} from '@data';
+import { useTranslation } from 'react-i18next';
+import { HotelData } from '@data';
+import GV from '../../utils/GV';
+import { useSelector } from 'react-redux';
+import { sharedMakeAddFavourite } from '../../helpers/sharedActions';
 
-export default function Hotel({navigation}) {
-  const {colors} = useTheme();
-  const {t} = useTranslation();
+export default function Hotel({ navigation, route }) {
+  const { colors } = useTheme();
+  const { t } = useTranslation();
 
   const [modeView, setModeView] = useState('block');
-  const [hotels] = useState(HotelData);
+  const [hotels, setHotel] = useState(route.params.searchAdd ?? HotelData);
   const [refreshing] = useState(false);
   const scrollAnim = new Animated.Value(0);
   const offsetAnim = new Animated.Value(0);
@@ -28,8 +35,10 @@ export default function Hotel({navigation}) {
     0,
     40,
   );
+  console.log("route===>>>>>>>..", route.params.searchAdd);
+  const userReducer = useSelector(state => state.userReducer)
 
-  const onChangeSort = () => {};
+  const onChangeSort = () => { };
 
   /**
    * @description Open modal when filterring mode is applied
@@ -81,7 +90,7 @@ export default function Hotel({navigation}) {
     switch (modeView) {
       case 'block':
         return (
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1, }}>
             <Animated.FlatList
               contentContainerStyle={{
                 paddingTop: 50,
@@ -91,7 +100,7 @@ export default function Hotel({navigation}) {
                   colors={[colors.primary]}
                   tintColor={colors.primary}
                   refreshing={refreshing}
-                  onRefresh={() => {}}
+                  onRefresh={() => { }}
                 />
               }
               scrollEventThrottle={1}
@@ -105,48 +114,64 @@ export default function Hotel({navigation}) {
                     },
                   },
                 ],
-                {useNativeDriver: true},
+                { useNativeDriver: true },
               )}
               data={hotels}
               key={'block'}
               keyExtractor={(item, index) => item.id}
-              renderItem={({item, index}) => (
+              renderItem={({ item, index }) => (
+                console.log("hotel==>", item),
                 <HotelItem
                   block
-                  image={item.image}
-                  name={item.name}
-                  location={item.location}
-                  price={item.price}
-                  available={item.available}
-                  rate={item.rate}
-                  rateStatus={item.rateStatus}
-                  numReviews={item.numReviews}
+                  // image={item.image}
+                  image={GV.imageUrlPrefix.concat(item.pictures[0]?.filename)}
+                  name={item.title}
+                  // location={item.location ?? 'Islamabad'}
+                  location={item.address ?? ''}
+                  price={item.price ?? 0}
+                  available={item.description}
+                  rate={item.tags ?? 4.5}
+                  rateStatus={item.rateStatus ?? 'Very Good'}
+                  numReviews={item.tags ?? 0}
                   services={item.services}
                   style={{
                     paddingBottom: 10,
                   }}
-                  onPress={() => navigation.navigate('HotelDetail')}
-                  onPressTag={() => navigation.navigate('Review')}
+                  onPress={() => navigation.navigate('HotelDetail', {
+                    pressedAdd: item
+                  })}
+                  // onPressTag={() => navigation.navigate('Review')}
+                  favIconOnPress={() => {
+                    if (userReducer.access_token) {
+
+                      sharedMakeAddFavourite(item?.id)
+
+                    } else {
+                      navigation.navigate('Walkthrough')
+                    }
+
+                  }}
+
                 />
               )}
             />
             <Animated.View
               style={[
                 styles.navbar,
-                {transform: [{translateY: navbarTranslate}]},
+                { transform: [{ translateY: navbarTranslate }] },
               ]}>
-              <FilterSort
+              {/* <FilterSort
                 modeView={modeView}
                 onChangeSort={onChangeSort}
                 onChangeView={onChangeView}
                 onFilter={onFilter}
-              />
+              /> */}
             </Animated.View>
           </View>
         );
       case 'grid':
         return (
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1, }}>
             <Animated.FlatList
               contentContainerStyle={{
                 paddingTop: 50,
@@ -160,7 +185,7 @@ export default function Hotel({navigation}) {
                   colors={[colors.primary]}
                   tintColor={colors.primary}
                   refreshing={refreshing}
-                  onRefresh={() => {}}
+                  onRefresh={() => { }}
                 />
               }
               scrollEventThrottle={1}
@@ -174,18 +199,19 @@ export default function Hotel({navigation}) {
                     },
                   },
                 ],
-                {useNativeDriver: true},
+                { useNativeDriver: true },
               )}
               numColumns={2}
               data={hotels}
               key={'grid'}
               keyExtractor={(item, index) => item.id}
-              renderItem={({item, index}) => (
+              renderItem={({ item, index }) => (
                 <HotelItem
                   grid
                   image={item.image}
                   name={item.name}
-                  location={item.location}
+                  // location={item.location}
+                  location={item.address ?? ''}
                   price={item.price}
                   available={item.available}
                   rate={item.rate}
@@ -204,7 +230,7 @@ export default function Hotel({navigation}) {
               style={[
                 styles.navbar,
                 {
-                  transform: [{translateY: navbarTranslate}],
+                  transform: [{ translateY: navbarTranslate }],
                 },
               ]}>
               <FilterSort
@@ -218,7 +244,7 @@ export default function Hotel({navigation}) {
         );
       case 'list':
         return (
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1, }}>
             <Animated.FlatList
               contentContainerStyle={{
                 paddingTop: 50,
@@ -228,7 +254,7 @@ export default function Hotel({navigation}) {
                   colors={[colors.primary]}
                   tintColor={colors.primary}
                   refreshing={refreshing}
-                  onRefresh={() => {}}
+                  onRefresh={() => { }}
                 />
               }
               scrollEventThrottle={1}
@@ -242,17 +268,18 @@ export default function Hotel({navigation}) {
                     },
                   },
                 ],
-                {useNativeDriver: true},
+                { useNativeDriver: true },
               )}
               data={hotels}
               key={'list'}
               keyExtractor={(item, index) => item.id}
-              renderItem={({item, index}) => (
+              renderItem={({ item, index }) => (
                 <HotelItem
                   list
                   image={item.image}
                   name={item.name}
-                  location={item.location}
+                  // location={item.location}
+                  location={item.address ?? ''}
                   price={item.price}
                   available={item.available}
                   rate={item.rate}
@@ -274,7 +301,7 @@ export default function Hotel({navigation}) {
               style={[
                 styles.navbar,
                 {
-                  transform: [{translateY: navbarTranslate}],
+                  transform: [{ translateY: navbarTranslate }],
                 },
               ]}>
               <FilterSort
@@ -288,7 +315,7 @@ export default function Hotel({navigation}) {
         );
       default:
         return (
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1, }}>
             <Animated.FlatList
               contentContainerStyle={{
                 paddingTop: 50,
@@ -298,7 +325,7 @@ export default function Hotel({navigation}) {
                   colors={[colors.primary]}
                   tintColor={colors.primary}
                   refreshing={refreshing}
-                  onRefresh={() => {}}
+                  onRefresh={() => { }}
                 />
               }
               scrollEventThrottle={1}
@@ -312,17 +339,18 @@ export default function Hotel({navigation}) {
                     },
                   },
                 ],
-                {useNativeDriver: true},
+                { useNativeDriver: true },
               )}
               data={hotels}
               key={'block'}
               keyExtractor={(item, index) => item.id}
-              renderItem={({item, index}) => (
+              renderItem={({ item, index }) => (
                 <HotelItem
                   block
                   image={item.image}
                   name={item.name}
-                  location={item.location}
+                  // location={item.location}
+                  location={item.address ?? ''}
                   price={item.price}
                   available={item.available}
                   rate={item.rate}
@@ -340,7 +368,7 @@ export default function Hotel({navigation}) {
             <Animated.View
               style={[
                 styles.navbar,
-                {transform: [{translateY: navbarTranslate}]},
+                { transform: [{ translateY: navbarTranslate }] },
               ]}>
               <FilterSort
                 modeView={modeView}
@@ -355,10 +383,10 @@ export default function Hotel({navigation}) {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <Header
         title={t('Search Results')}
-        
+
         renderLeft={() => {
           return (
             <Icon
